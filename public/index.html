@@ -1,0 +1,58 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLI Web Interface</title>
+</head>
+
+<body>
+    <h1>CLI Web Interface</h1>
+    <form id="myForm">
+        <div>
+            Source Folder Path : <input type="text" id="source" placeholder="D:\RapidDox\Sample_Files\TWB-Copy" />
+        </div>
+        <div>
+            Output Folder Path : <input type="text" id="output" placeholder="D:\RapidDox\Sample_Files\TWB-Copy" />
+        </div>
+        <div>
+            Select Ouput Formats : 
+            <input type="checkbox" name="format" id="html"> Html
+            <input type="checkbox" name="format" id="pdf"> Pdf
+            <input type="checkbox" name="format" id="csv"> Csv
+            <input type="checkbox" name="format" id="excel"> Excel
+            <input type="checkbox" name="format" id="docx"> Docx
+        </div>
+        <button id="exampleBtn" type="submit">Run Start Command</button>
+    </form>
+
+
+    <script>
+        const socket = new WebSocket('ws://localhost:3000');
+
+        document.getElementById('myForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting in the traditional way
+
+            // Get the values of the input fields
+            const source = document.getElementById('source').value;
+            const output = document.getElementById('output').value;
+            let formats = "";
+            const format = document.getElementsByName('format').forEach(e=>{
+                if(e.checked) formats = formats + e.id + ','
+            })
+            
+            const data = {source,output,formats}
+            console.log(data);
+            
+            const jsonString = JSON.stringify(data);
+            const encoder = new TextEncoder();
+            const uint8Array = encoder.encode(jsonString);
+            socket.send(uint8Array);
+        });
+
+    </script>
+</body>
+
+</html>

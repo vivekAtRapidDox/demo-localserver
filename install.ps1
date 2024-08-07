@@ -1,0 +1,1 @@
+Start-Process -WindowStyle Hidden -FilePath "powershell" -ArgumentList "-Command", "cd 'D:\RapidDox\Bulkpro_CLI\Demo-with-localserver'; npm start"
